@@ -5,6 +5,8 @@ export interface MorseSymbol {
 
 export type TrainMode = 'charToCode' | 'codeToChar' | 'audioToChar' | 'typingToCode'
 
+export type AppTheme = 'dark' | 'high-contrast'
+
 export interface HistoryEntry {
   id: number
   input: string

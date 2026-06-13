@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { MORSE_TABLE, REVERSE_TABLE, textToMorse, morseToText } from '../utils/morse-code'
-import type { TrainMode, HistoryEntry } from '../types'
+import type { TrainMode, HistoryEntry, AppTheme } from '../types'
 
 export const useMorseStore = defineStore('morse', () => {
   const inputText = ref('')
@@ -11,6 +11,7 @@ export const useMorseStore = defineStore('morse', () => {
   const frequency = ref(700)
   const volume = ref(0.6)
   const trainMode = ref<TrainMode>('charToCode')
+  const theme = ref<AppTheme>('dark')
   const history = ref<HistoryEntry[]>([])
   const quizChar = ref('')
   const userAnswer = ref('')
@@ -92,7 +93,7 @@ export const useMorseStore = defineStore('morse', () => {
 
   return {
     inputText, morseOutput, decodedText, wpm, frequency, volume,
-    trainMode, history, quizChar, userAnswer, score, isPlaying,
+    trainMode, theme, history, quizChar, userAnswer, score, isPlaying,
     dotDuration, encode, decode, playMorse, playTone,
     generateQuiz, checkAnswer, resetScore
   }
