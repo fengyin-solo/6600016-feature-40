@@ -1,7 +1,23 @@
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { defineStore } from 'pinia'
 import { MORSE_TABLE, REVERSE_TABLE, textToMorse, morseToText } from '../utils/morse-code'
 import type { TrainMode, HistoryEntry, AppTheme } from '../types'
+
+const THEME_STORAGE_KEY = 'morse-trainer-theme'
+
+function loadSavedTheme(): AppTheme {
+  if (typeof localStorage !== 'undefined') {
+    const saved = localStorage.getItem(THEME_STORAGE_KEY)
+    if (saved === 'dark' || saved === 'high-contrast') return saved
+  }
+  return 'dark'
+}
+
+function applyThemeToDOM(theme: AppTheme) {
+  if (typeof document !== 'undefined') {
+    document.documentElement.setAttribute('data-theme', theme)
+  }
+}
 
 export const useMorseStore = defineStore('morse', () => {
   const inputText = ref('')
@@ -11,7 +27,7 @@ export const useMorseStore = defineStore('morse', () => {
   const frequency = ref(700)
   const volume = ref(0.6)
   const trainMode = ref<TrainMode>('charToCode')
-  const theme = ref<AppTheme>('dark')
+  const theme = ref<AppTheme>(loadSavedTheme())
   const history = ref<HistoryEntry[]>([])
   const quizChar = ref('')
   const userAnswer = ref('')
@@ -19,6 +35,15 @@ export const useMorseStore = defineStore('morse', () => {
   const isPlaying = ref(false)
   let audioCtx: AudioContext | null = null
   let currentOscillator: OscillatorNode | null = null
+
+  applyThemeToDOM(theme.value)
+
+  watch(theme, (newTheme) => {
+    applyThemeToDOM(newTheme)
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(THEME_STORAGE_KEY, newTheme)
+    }
+  })
 
   const dotDuration = computed(() => 1200 / wpm.value)
 

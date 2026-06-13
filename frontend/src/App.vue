@@ -91,7 +91,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { useMorseStore } from './store/morse'
 import { MORSE_TABLE } from './utils/morse-code'
 import WaveformDisplay from './components/WaveformDisplay.vue'
@@ -111,8 +111,4 @@ const themes = [
   { value: 'dark' as const, label: '夜间' },
   { value: 'high-contrast' as const, label: '高对比' },
 ]
-
-watch(() => store.theme, (theme) => {
-  document.documentElement.setAttribute('data-theme', theme)
-}, { immediate: true })
 </script>
